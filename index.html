@@ -1,0 +1,415 @@
+<!doctype html>
+<html lang="en" prefix="og: https://ogp.me/ns#">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Peach — Portfolio</title>
+  <meta name="description" content="Peach's minimalist portfolio — projects, skills, and contact." />
+  <meta name="theme-color" content="#0f172a" />
+
+  <!-- Open Graph / Twitter -->
+  <meta property="og:title" content="Peach — Portfolio" />
+  <meta property="og:description" content="Projects, skills, contact." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="./cover.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <style>
+    :root{
+      --bg: #0b1020;
+      --card: #0f172a;
+      --muted: #94a3b8;
+      --text: #e2e8f0;
+      --brand: #22d3ee;
+      --brand-2: #a78bfa;
+      --ring: #334155;
+
+      /* mouse-follow initial position */
+      --mx: 50vw;
+      --my: 50vh;
+    }
+    @media (prefers-color-scheme: light){
+      :root{
+        --bg: #f8fafc;
+        --card: #ffffff;
+        --muted: #475569;
+        --text: #0f172a;
+        --ring: #cbd5e1;
+      }
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;height:100%;scroll-behavior:smooth}
+    body{font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;background:var(--bg);color:var(--text)}
+    a{color:var(--brand);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .container{max-width:1120px;margin:0 auto;padding:24px}
+
+    /* ── TOPBAR fixed + fade on scroll ───────────────────────── */
+    header{
+      position:fixed; top:0; left:0; right:0;
+      z-index:100;
+      background: color-mix(in oklab, var(--bg) 88%, transparent);
+      backdrop-filter: saturate(120%) blur(10px);
+      border-bottom:1px solid var(--ring);
+      transition: background .25s ease, border-color .25s ease, box-shadow .25s ease;
+      will-change: background;
+    }
+    header.scrolled{
+      background: color-mix(in oklab, var(--bg) 70%, transparent);
+      border-bottom-color: color-mix(in oklab, var(--ring) 60%, transparent);
+      box-shadow: 0 4px 20px color-mix(in oklab, black 20%, transparent);
+    }
+
+    nav{display:flex;gap:16px;align-items:center;justify-content:space-between}
+    nav .links a{margin:0 8px;padding:10px 12px;border-radius:10px}
+    nav .links a:hover{background:color-mix(in oklab, var(--card) 85%, transparent)}
+    .btn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--ring);padding:10px 14px;border-radius:12px;background:linear-gradient(135deg, color-mix(in oklab, var(--card) 80%, transparent), color-mix(in oklab, var(--card) 95%, transparent));box-shadow:0 4px 20px color-mix(in oklab, var(--brand) 10%, transparent);transition:transform .1s ease;cursor:pointer}
+    .btn:hover{transform:translateY(-1px)}
+    .badge{display:inline-block;padding:6px 10px;border-radius:999px;border:1px solid var(--ring);color:var(--muted);font-size:12px}
+    .card{background:linear-gradient(180deg, color-mix(in oklab, var(--card) 98%, transparent) 0%, color-mix(in oklab, var(--card) 92%, transparent) 100%);border:1px solid var(--ring);border-radius:20px;padding:24px}
+    .grid{display:grid;gap:16px}
+    .grid.cols-3{grid-template-columns:repeat(3,1fr)}
+    .footer{border-top:1px solid var(--ring);margin-top:40px;padding-top:24px;color:var(--muted);font-size:14px;text-align:center}
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
+    .wave{background:radial-gradient(1200px 400px at 10% 0%, color-mix(in oklab, var(--brand) 18%, transparent), transparent 60%),
+           radial-gradient(900px 400px at 90% 0%, color-mix(in oklab, var(--brand-2) 18%, transparent), transparent 60%)}
+
+    /* HERO Centered */
+    .hero{
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      gap:20px;
+      padding:60px 0;
+    }
+    h1{font-size:40px;line-height:1.15;margin:0 0 12px}
+    h2{font-size:28px;margin:0 0 12px}
+    .muted{color:var(--muted)}
+
+    /* Avatar แบบสี่เหลี่ยม */
+    .hero-head{display:flex; flex-direction:column; align-items:center; gap:12px; margin-bottom:16px;}
+    .avatar-rect{ --w:220px; --h:260px; width:var(--w); height:var(--h); border-radius:16px; background:none; }
+    .avatar-rect img{ width:100%; height:100%; object-fit:cover; border-radius:inherit; border:none; display:block; }
+    .greet-pill{ display:inline-flex; align-items:center; gap:10px; padding:8px 12px; border-radius:999px; border:1px dashed var(--ring); color:var(--muted); font-size:14px; }
+    @media (max-width:900px){ .avatar-rect{ --w:180px; --h:220px; } }
+
+    /* Language toggle */
+    .lang-th { display:none; }
+
+    /* Social icon buttons (Contact) */
+    .socials{ display:flex; gap:20px; flex-wrap:wrap; justify-content:center; margin-top:12px; }
+    .social-btn{
+      width:56px; height:56px; border-radius:999px;
+      display:inline-flex; align-items:center; justify-content:center;
+      border:1px solid var(--ring); background:transparent; text-decoration:none;
+      transition:transform .12s ease, box-shadow .2s ease, border-color .2s ease;
+      box-shadow:0 6px 18px color-mix(in oklab, var(--brand) 12%, transparent);
+    }
+    .social-btn:hover{ transform:translateY(-2px); border-color: color-mix(in oklab, var(--brand) 50%, var(--ring)); }
+    .social-btn:focus-visible{ outline:3px solid color-mix(in oklab, var(--brand) 40%, transparent); outline-offset:3px; }
+    .social-btn svg{ width:26px; height:26px; stroke:var(--muted); fill:none; }
+
+    /* ==== Mouse-follow Effect ==== */
+    #cursor-fx{
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5; /* เดิม 1 → เพิ่มเป็น 5 ให้เห็นแน่นอน */
+  opacity: .7;
+  background:
+    radial-gradient(400px 400px at var(--mx) var(--my),
+      rgba(34, 211, 238, 0.35) 0%, transparent 60%),
+    radial-gradient(500px 500px at calc(var(--mx) + 150px) calc(var(--my) + 100px),
+      rgba(167, 139, 250, 0.25) 0%, transparent 70%);
+}
+
+    #cursor-fx.dim { opacity: .28; }
+    @media (prefers-reduced-motion: reduce){
+      #cursor-fx{ display:none !important; }
+    }
+    body.no-cursorfx #cursor-fx{ display:none; }
+  </style>
+</head>
+<body>
+  <!-- Mouse-follow overlay -->
+  <div id="cursor-fx" aria-hidden="true"></div>
+
+  <header>
+    <div class="container">
+      <nav aria-label="Main">
+        <div style="display:flex;align-items:center;gap:10px">
+          <span aria-hidden="true">🧑‍💻</span>
+          <strong>Peach</strong>
+          <span class="badge">UX/UI  BA/SA TESTER FRONTEND</span>
+        </div>
+        <div class="links" role="menubar">
+            <a href="#Home" role="menuitem">Home</a>
+          <a href="#about" role="menuitem">About</a>
+          <a href="#skills" role="menuitem">Skills</a>
+          <a href="#projects" role="menuitem">Projects</a>
+          <a href="#contact" role="menuitem">Contact</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wave">
+    <!-- HERO -->
+    <section class="container hero" id="Home">
+      <div class="hero-head">
+        <div class="avatar-rect">
+          <img src="./me.jpg" alt="Portrait of Peach" loading="lazy">
+        </div>
+        <div class="greet-pill" aria-label="Intro">
+          <span>สวัสดีเราชื่อพีชนะ</span>
+          <span class="sr-only">Greeting</span>
+        </div>
+      </div>
+
+      <h1>Yanakorn Bunphanuk 
+        <span style="background:linear-gradient(90deg,var(--brand),var(--brand-2));-webkit-background-clip:text;background-clip:text;color:transparent">
+          UX/UI & Frontend
+        </span>
+      </h1>
+
+      <p class="muted" style="max-width:700px;margin:0 auto;">
+        Hello, I’m <strong>Yanakorn Bunphanuk (Peach)</strong>, a senior Computer Science student 
+        passionate about UX/UI Design, Frontend, and System Analysis. 
+        I focus on creating simple, accessible, and user-centered digital solutions that connect 
+        design with real-world needs.
+      </p>
+
+      <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:20px">
+        <a class="btn" href="#projects">View Projects</a>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="container" id="about">
+      <div style="text-align:right;margin-bottom:10px;">
+        <button class="btn" onclick="toggleLang()">🌐 EN / TH</button>
+      </div>
+
+      <div class="card">
+        <h2>About / เกี่ยวกับฉัน</h2>
+
+        <!-- ภาษาอังกฤษ -->
+        <div class="lang-en">
+          <p>Hi, I’m <strong>Peach Yanakorn Bunphanuk</strong>, a senior Computer Science student 
+          with a strong passion for creating meaningful digital solutions. 
+          I enjoy combining <strong>UX/UI design</strong>, <strong>frontend development</strong>, 
+          and <strong>business/system analysis</strong> to craft interfaces that are not only visually clear 
+          but also highly practical and accessible to all types of users.</p>
+
+          <p>Over the past years, I have gained hands-on experience through academic projects and personal initiatives, 
+          including designing a <em>cooperative education hours tracking system</em>, 
+          building <em>student–teacher–admin management flows</em>, and creating an 
+          <em>OCR-based pipeline for certificate data extraction</em>. 
+          These projects helped me grow skills in problem-solving, cross-team collaboration, 
+          and delivering solutions that answer real-world needs.</p>
+
+          <p class="muted">Currently, I am improving my foundation in <strong>frontend development (HTML, CSS, JavaScript)</strong>, 
+          sharpening my mindset in <strong>software testing</strong>, and learning to document ideas 
+          in a clear and concise way.  
+          In the long run, my goal is to become a versatile professional who can bridge the gap 
+          between design and engineering—delivering simple, reliable, and user-centered products 
+          that make people’s lives easier.</p>
+        </div>
+
+        <!-- ภาษาไทย -->
+        <div class="lang-th">
+          <p>สวัสดีครับ ผมชื่อ <strong>ญาณากร บรรผนึก (พีช)</strong> ปัจจุบันกำลังศึกษาอยู่ชั้นปีที่ 4 
+          สาขาวิทยาการคอมพิวเตอร์ และมีความสนใจอย่างยิ่งในการสร้างสรรค์โซลูชันดิจิทัลที่มีคุณค่าและใช้ได้จริง 
+          โดยผมชื่นชอบการผสมผสาน <strong>การออกแบบ UX/UI</strong>, <strong>การพัฒนา Frontend</strong>, 
+          และ <strong>การวิเคราะห์และออกแบบระบบ</strong> เพื่อสร้างประสบการณ์ผู้ใช้ที่ทั้งเข้าใจง่ายและตอบโจทย์การใช้งานจริง</p>
+
+          <p>ในช่วงที่ผ่านมา ผมได้มีโอกาสทำโครงการทั้งด้านวิชาการและส่วนตัว เช่น 
+          การออกแบบ <em>ระบบติดตามชั่วโมงกิจกรรมสหกิจศึกษา</em>, 
+          การสร้าง <em>โฟลว์การจัดการสำหรับนักศึกษา-อาจารย์-ผู้ดูแลระบบ</em>, 
+          และการพัฒนา <em>กระบวนการ OCR เพื่อดึงข้อมูลจากประกาศนียบัตรอัตโนมัติ</em>. 
+          โครงการเหล่านี้ช่วยเสริมทักษะการแก้ปัญหา การทำงานร่วมกับทีม และการส่งมอบโซลูชันที่ตอบสนองต่อความต้องการจริง</p>
+
+          <p class="muted">ปัจจุบัน ผมกำลังพัฒนาทักษะพื้นฐานด้าน <strong>การพัฒนา Frontend (HTML, CSS, JavaScript)</strong>, 
+          ฝึกฝนทักษะด้าน <strong>การทดสอบซอฟต์แวร์</strong>, และฝึกการเขียนเอกสารให้ชัดเจนและกระชับ 
+          เป้าหมายในอนาคตคือการก้าวไปเป็นมืออาชีพที่สามารถเชื่อมโยงการออกแบบเข้ากับวิศวกรรมซอฟต์แวร์ 
+          เพื่อสร้างสรรค์ผลิตภัณฑ์ที่เรียบง่าย เชื่อถือได้ และตอบโจทย์ผู้ใช้จริง</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TECHNICAL SKILLS -->
+    <section class="container" id="skills">
+      <div class="card">
+        <h2>Technical Skills / ทักษะ</h2>
+        <div class="grid cols-3" aria-label="Skill chips">
+          <span class="chip">HTML — Basics</span>
+          <span class="chip">CSS — Basics</span>
+          <span class="chip">JavaScript — Basics</span>
+          <span class="chip">Figma — Wireframe</span>
+          <span class="chip">QA — Postman</span>
+          <span class="chip">Git — GitHub</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SOFT SKILLS -->
+    <section class="container" id="softskills">
+      <div class="card">
+        <h2>Soft Skills / ทักษะด้านการทำงาน</h2>
+        <div class="grid cols-3" aria-label="Soft skill chips">
+          <span class="chip">Time Management</span>
+          <span class="chip">Flexibility & Adaptability</span>
+          <span class="chip">Teamwork & Collaboration</span>
+          <span class="chip">Leadership</span>
+          <span class="chip">Creativity</span>
+          <span class="chip">Communication</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section class="container" id="projects">
+      <div class="card">
+        <h2>Projects / ผลงาน</h2>
+        <div class="grid cols-3" role="list">
+          <article class="card" role="listitem">
+            <h3 style="margin-top:0">OCR Certificate Extractor</h3>
+            <p class="muted">Built an OCR pipeline to read BUU MOOC certificates and extract fields. Compared TyphoonOCR vs EasyOCR vs Tesseract.</p>
+          </article>
+          <article class="card" role="listitem">
+            <h3 style="margin-top:0">Co-op Hours Tracking (Design)</h3>
+            <p class="muted">Designed UX flows for student, teacher, and admin roles with QR check-in and dashboards.</p>
+          </article>
+          <article class="card" role="listitem">
+            <h3 style="margin-top:0">Simple Landing Page (Design)</h3>
+            <p class="muted">One-page landing design focused on clarity and real-world usage.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT (icon buttons) -->
+    <section class="container" id="contact">
+      <div class="card" style="text-align:center">
+        <h2>Contact / ติดต่อ</h2>
+        <p class="muted" style="margin-top:-6px">กดปุ่มเพื่อไปยังโปรไฟล์หรือส่งอีเมลถึงฉัน</p>
+
+        <div class="socials" role="list">
+          <!-- Instagram -->
+          <a class="social-btn" role="listitem" href="https://www.instagram.com/yourname" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" ry="5" stroke-width="1.8"/><circle cx="12" cy="12" r="4" stroke-width="1.8"/><circle cx="17.5" cy="6.5" r="1.2" stroke-width="1.6"/></svg>
+          </a>
+          <!-- Facebook (ตอนนี้ลิงก์นี้เป็น IG ของคุณ ถ้าจะใช้ Facebook เปลี่ยน URL ได้เลย) -->
+          <a class="social-btn" role="listitem" href="https://www.instagram.com/y.k_b_bunnn/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path stroke-width="1.8" d="M15 3h-2.5A4.5 4.5 0 0 0 8 7.5V10H6v4h2v7h4v-7h3l1-4h-4V7.5A1.5 1.5 0 0 1 12.5 6H15z"/></svg>
+          </a>
+          <!-- Email -->
+          <a class="social-btn" role="listitem" href="mailto:peachyanakornbunpanuk@gmail.com" aria-label="Email">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path stroke-width="1.8" d="M4 6h16a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z"/><path stroke-width="1.8" d="M22 8l-10 6L2 8"/></svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="container">
+      <div class="footer">
+        <div>© <span id="year"></span> peachyanakornbunpanuk</div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Theme toggle
+    const modeBtn = document.getElementById('modeBtn');
+    const applyTheme = m => {
+      document.documentElement.style.colorScheme = m;
+      localStorage.setItem('theme', m);
+      modeBtn.setAttribute('aria-pressed', m === 'dark');
+    };
+    const saved = localStorage.getItem('theme');
+    if(saved){ applyTheme(saved); }
+    modeBtn.addEventListener('click', () => {
+      const current = localStorage.getItem('theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      applyTheme(current === 'dark' ? 'light' : 'dark');
+    });
+
+    // Year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Reduce motion
+    if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+      document.querySelectorAll('*').forEach(el => el.style.scrollBehavior = 'auto');
+    }
+
+    // Toggle Language EN/TH (About)
+    function toggleLang(){
+      const en = document.querySelector('.lang-en');
+      const th = document.querySelector('.lang-th');
+      if(en.style.display === 'none'){
+        en.style.display = 'block';
+        th.style.display = 'none';
+      } else {
+        en.style.display = 'none';
+        th.style.display = 'block';
+      }
+    }
+
+    // Fixed header helpers: padding-top + fade on scroll
+    const headerEl = document.querySelector('header');
+    function setHeaderPadding(){
+      document.body.style.paddingTop = headerEl.offsetHeight + 'px';
+    }
+    function setHeaderState(){
+      headerEl.classList.toggle('scrolled', window.scrollY > 10);
+    }
+    window.addEventListener('load', () => { setHeaderPadding(); setHeaderState(); });
+    window.addEventListener('resize', setHeaderPadding);
+    window.addEventListener('scroll', setHeaderState, { passive: true });
+
+    // ==== Mouse-follow Effect (lightweight + lerp) ====
+    (() => {
+      const fx = document.getElementById('cursor-fx');
+      if (!fx || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+      let targetX = window.innerWidth  / 2;
+      let targetY = window.innerHeight / 2;
+      let curX = targetX, curY = targetY;
+      let rafId = null;
+      let idleTimer = null;
+
+      function onMove(e){
+        const p = e.touches ? e.touches[0] : e;
+        targetX = p.clientX; targetY = p.clientY;
+
+        fx.classList.remove('dim');
+        clearTimeout(idleTimer);
+        idleTimer = setTimeout(() => fx.classList.add('dim'), 900);
+
+        if (!rafId) rafId = requestAnimationFrame(tick);
+      }
+
+      function tick(){
+        const ease = 0.15; // ยิ่งมากยิ่งไว
+        curX += (targetX - curX) * ease;
+        curY += (targetY - curY) * ease;
+
+        document.documentElement.style.setProperty('--mx', curX + 'px');
+        document.documentElement.style.setProperty('--my', curY + 'px');
+
+        if (Math.hypot(targetX - curX, targetY - curY) > 0.1){
+          rafId = requestAnimationFrame(tick);
+        } else {
+          rafId = null;
+        }
+      }
+
+      window.addEventListener('mousemove', onMove, { passive:true });
+      window.addEventListener('touchmove', onMove, { passive:true });
+      tick(); // initial
+    })();
+  </script>
+</body>
+</html>
